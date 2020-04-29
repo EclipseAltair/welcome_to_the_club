@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """smena_test URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -21,6 +22,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^django-rq/', include('django_rq.urls')),
+    url(r'^checkgen/', include('checkgen.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
