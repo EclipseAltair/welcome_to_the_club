@@ -1,9 +1,10 @@
 # IDE
 .idea/
+.vscode/
 
 # Python
 *.pyc
-__pycache__/
+__pycache__
 *env/
 
 # DB
@@ -11,3 +12,4 @@ database-data/
 
 # Django
 migrations
+requirements-dev.txt
