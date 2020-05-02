@@ -1,0 +1,42 @@
+[
+  {
+    "model": "checkgen.printer",
+    "pk": 1,
+    "field": {
+      "name": "kitchen_printer",
+      "api_key": "key1",
+      "check_type": "kitchen",
+      "point_id": 1
+    }
+  },
+  {
+    "model": "checkgen.printer",
+    "pk": 2,
+    "field": {
+      "name": "client_printer",
+      "api_key": "key2",
+      "check_type": "client",
+      "point_id": 1
+    }
+  },
+  {
+    "model": "checkgen.printer",
+    "pk": 3,
+    "field": {
+      "name": "kitchen_printer",
+      "api_key": "key3",
+      "check_type": "kitchen",
+      "point_id": 2
+    }
+  },
+  {
+    "model": "checkgen.printer",
+    "pk": 4,
+    "field": {
+      "name": "client_printer",
+      "api_key": "key4",
+      "check_type": "client",
+      "point_id": 2
+    }
+  }
+]
