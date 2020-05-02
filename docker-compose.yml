@@ -8,10 +8,12 @@ services:
     restart: always
     ports:
       - "5432:5432"
-    env_file:
-      - database.env # configure postgres
+    environment:
+      POSTGRES_USER: "forfaruser"
+      POSTGRES_PASSWORD: "qwe123"
+      POSTGRES_DB: "forfar"
     volumes:
-      - database-data:/var/lib/postgresql/data/
+      - ./database-data:/var/lib/postgresql/data
 
   redis:
     container_name: "redis_forfar"
@@ -26,3 +28,6 @@ services:
     restart: always
     ports:
       - "8001:80"
+
+volumes:
+  database-data:

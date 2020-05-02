@@ -1,5 +1,8 @@
 .idea/
+
 *.pyc
 __pycache__/
 
 *env/
+
+database-data/
