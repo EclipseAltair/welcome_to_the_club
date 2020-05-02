@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+
+  postgresql:
+    container_name: "postgresql_forfar"
+    image: postgres:9.6
+    restart: always
+    ports:
+      - "5432:5432"
+    env_file:
+      - database.env # configure postgres
+    volumes:
+      - database-data:/var/lib/postgresql/data/
+
+  redis:
+    container_name: "redis_forfar"
+    image: redis
+    restart: always
+    ports:
+      - "6379:6379"
+
+  wkhtmltopdf:
+    container_name: "wkhtmltopdf_forfar"
+    image: openlabs/docker-wkhtmltopdf-aas
+    restart: always
+    ports:
+      - "8001:80"
