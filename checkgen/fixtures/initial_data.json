@@ -2,7 +2,7 @@
   {
     "model": "checkgen.printer",
     "pk": 1,
-    "field": {
+    "fields": {
       "name": "kitchen_printer",
       "api_key": "key1",
       "check_type": "kitchen",
@@ -12,7 +12,7 @@
   {
     "model": "checkgen.printer",
     "pk": 2,
-    "field": {
+    "fields": {
       "name": "client_printer",
       "api_key": "key2",
       "check_type": "client",
@@ -22,7 +22,7 @@
   {
     "model": "checkgen.printer",
     "pk": 3,
-    "field": {
+    "fields": {
       "name": "kitchen_printer",
       "api_key": "key3",
       "check_type": "kitchen",
@@ -32,7 +32,7 @@
   {
     "model": "checkgen.printer",
     "pk": 4,
-    "field": {
+    "fields": {
       "name": "client_printer",
       "api_key": "key4",
       "check_type": "client",
