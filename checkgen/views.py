@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 import os
 import json
-from django.shortcuts import render
+
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django_rq import enqueue
 
 from smena_test.settings import BASE_DIR
 from .models import Check, Printer
+from .wkhtmltopdf import pdf_generate
 
 
 @csrf_exempt    # исключение из CSRF-проверки для CORS
@@ -20,6 +22,7 @@ def create_checks(request):
             response.status_code = 400
             return response
         
+        # !!!!!!!!!!!!!!!!!!!!!!!!!!
         if Check.objects.filter(order__id=body_data['id']).count() != 0:    # если заказ с таким id уже есть в БД
             response = JsonResponse({"error": "Для данного заказа уже созданы чеки"})
             response.status_code = 400
@@ -35,12 +38,14 @@ def create_checks(request):
             kitchen_path = os.path.join(BASE_DIR, f'media/pdf/{body_data["id"]}_{"kitchen"}')
             kitchen_check = Check.objects.create(printer_id=kitchen_printer, type='kitchen', order=body_data,
                                                  status='new', pdf_file=kitchen_path)
+            enqueue(pdf_generate, 'kitchen', kitchen_check.id, body_data)  # отправление задания в очередь по умолчанию
     
         client_printers = Printer.objects.filter(point_id=body_data['point_id'], check_type='client')
         for client_printer in client_printers:
             client_path = os.path.join(BASE_DIR, f'media/pdf/{body_data["id"]}_{"client"}')
             client_check = Check.objects.create(printer_id=client_printer, type='client', order=body_data, 
                                                 status='new', pdf_file=client_path)
+            enqueue(pdf_generate, 'client', client_check.id, body_data)    # отправление задания в очередь по умолчанию
         
         response = JsonResponse({"ok": "Чеки успешно созданы"})
         response.status_code = 200
