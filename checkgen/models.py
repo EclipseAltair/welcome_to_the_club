@@ -22,7 +22,7 @@ class Printer(models.Model):
     point_id = models.IntegerField('Точка')
     
     def __str__(self):
-        return f'{self.point_id}: принтер {self.name}'
+        return f'Точка {self.point_id}: принтер {self.name}'
     
     class Meta:
         verbose_name = 'Принтер'
@@ -37,7 +37,7 @@ class Check(models.Model):
     pdf_file = models.FileField()
 
     def __str__(self):
-        return f'Принтер {self.printer_id}'
+        return f'{self.printer_id}, {self.type} чек'
 
     class Meta:
         verbose_name = 'Чек'
