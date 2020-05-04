@@ -24,13 +24,13 @@ def create_checks(request):    # создание чеков для заказа
         if Printer.objects.filter(point_id=body_data["point_id"]).count() == 0:    # если кол-во принтеров у точки 0
             return JsonResponse({"error": "Для данной точки не настроено ни одного принтера"}, status=400)
 
-        kitchen_printer = Printer.objects.filter(point_id=body_data['point_id'], check_type='kitchen')[0]
+        kitchen_printer = Printer.objects.get(point_id=body_data['point_id'], check_type='kitchen')
         kitchen_path = f'media/pdf/{body_data["id"]}_{"kitchen"}.pdf'
         kitchen_check = Check.objects.create(printer_id=kitchen_printer, type='kitchen', order=body_data,
                                              status='new', pdf_file=kitchen_path)
         enqueue(generate_pdf, 'kitchen', kitchen_check.id, kitchen_path, body_data)    # добавление задачи в очередь
     
-        client_printer = Printer.objects.filter(point_id=body_data['point_id'], check_type='client')[0]
+        client_printer = Printer.objects.get(point_id=body_data['point_id'], check_type='client')
         client_path = f'media/pdf/{body_data["id"]}_{"client"}.pdf'
         client_check = Check.objects.create(printer_id=client_printer, type='client', order=body_data, 
                                             status='new', pdf_file=client_path)
