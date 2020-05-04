@@ -97,11 +97,11 @@ RQ_QUEUES = {
         'HOST': 'localhost',
         'PORT': 6379,
         'DB': 0,
-        'PASSWORD': RQ_PASSWORD,
         'DEFAULT_TIMEOUT': 360,
     },
 }
 
+RQ_API_TOKEN = "token"
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
@@ -139,7 +139,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'static', 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR)
 
 MEDIA_URL = '/media/'
 
