@@ -34,7 +34,7 @@ class Check(models.Model):
     type = models.CharField('Тип чека', choices=CHECK_TYPES, max_length=7)
     order = JSONField('Заказ')
     status = models.CharField('Статус', choices=STATUS, max_length=8)
-    pdf_file = models.FileField()
+    pdf_file = models.FileField('PDF файл')
 
     def __str__(self):
         return f'{self.printer_id}, {self.type} чек'
