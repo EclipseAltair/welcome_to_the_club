@@ -10,14 +10,14 @@ CHECK_TYPES = (
 
 STATUS = (
     ('new', 'Новый'),
-    ('rendered', 'Генерируется'),
+    ('rendered', 'Сгенерирован'),
     ('printed', 'Напечатан'),
 )
 
 
 class Printer(models.Model):
     name = models.CharField('Имя', max_length=64)
-    api_key = models.CharField('API Ключ', max_length=32)
+    api_key = models.CharField('API Ключ', max_length=32, unique=True)
     check_type = models.CharField('Тип чека', choices=CHECK_TYPES, max_length=7)
     point_id = models.IntegerField('Точка')
     

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import json
 
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django_rq import enqueue
 
@@ -47,7 +47,9 @@ def new_checks(request):    # список доступных чеков для 
         except KeyError:
             return JsonResponse({"error": "There is not api_key"}, status=400)
         
-        if Printer.objects.filter(api_key=api_key).count() == 0:
+        try:
+            Printer.objects.get(api_key=api_key)
+        except Printer.DoesNotExist:
             return JsonResponse({"error": "Ошибка авторизации"}, status=401)
         
         rendered_checks = Check.objects.filter(printer_id__api_key=api_key, status='rendered')
@@ -60,5 +62,36 @@ def new_checks(request):    # список доступных чеков для 
     return JsonResponse({"error": "Method Not Allowed"}, status=405)
 
 
-def get_check(request):
+def get_check(request):    # pdf-файл чека
+    if request.method == 'GET':
+        try:
+            api_key = request.GET['api_key']
+        except KeyError:
+            return JsonResponse({"error": "There is not api_key"}, status=400)
+
+        try:
+            check_id = int(request.GET['check_id'])
+        except KeyError:
+            return JsonResponse({"error": "There is not check_id"}, status=400)
+        
+        try:
+            Printer.objects.get(api_key=api_key)
+        except Printer.DoesNotExist:
+            return JsonResponse({"error": "Ошибка авторизации"}, status=401)
+
+        try:
+            check = Check.objects.get(printer_id__api_key=api_key, order__id=check_id)
+        except Check.DoesNotExist:
+            return JsonResponse({"error": "Данного чека не существует"}, status=400)
+        
+        if check.status == 'new':
+            return JsonResponse({"error": "Для данного чека не сгенерирован PDF-файл"}, status=400)
+        
+        check_path = check.pdf_file.path
+        with open(check_path, 'rb') as f:
+            pdf = f.read()
+            
+        response = HttpResponse(pdf, content_type='application/pdf', status=200)
+        response['Content-Disposition'] = f'attachment;filename={check_path}'   # принуждение к загрузке
+        return response
     return JsonResponse({"error": "Method Not Allowed"}, status=405)
