@@ -93,5 +93,8 @@ def get_check(request):    # pdf-файл чека
             
         response = HttpResponse(pdf, content_type='application/pdf', status=200)
         response['Content-Disposition'] = f'attachment;filename={check_path}'   # принуждение к загрузке
+
+        Check.objects.filter(order__id=check_id).update(status='printed')
+        
         return response
     return JsonResponse({"error": "Method Not Allowed"}, status=405)
