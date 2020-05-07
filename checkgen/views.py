@@ -80,7 +80,7 @@ def get_check(request):    # pdf-файл чека
             return JsonResponse({"error": "Ошибка авторизации"}, status=401)
 
         try:
-            check = Check.objects.get(printer_id__api_key=api_key, order__id=check_id)
+            check = Check.objects.get(printer_id__api_key=api_key, id=check_id)
         except Check.DoesNotExist:
             return JsonResponse({"error": "Данного чека не существует"}, status=400)
         
