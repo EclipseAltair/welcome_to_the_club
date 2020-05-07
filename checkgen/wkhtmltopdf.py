@@ -19,7 +19,7 @@ def generate_pdf(check_type, check_id, check_path, order):
  
     response = requests.post('http://localhost:8001', json={'contents': html_like_bytes})  # запрос к wkhtmltopdf
 
-    Check.objects.filter(order__id=check_id).update(status='rendered')
+    Check.objects.filter(id=check_id).update(status='rendered')
     
     with open(check_path, 'wb') as f:
         f.write(response.content)
