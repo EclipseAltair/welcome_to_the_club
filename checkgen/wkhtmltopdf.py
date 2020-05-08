@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import base64
+from base64 import b64encode
 import requests
 
 from django.template.loader import render_to_string
@@ -15,7 +15,7 @@ def generate_pdf(check_type, check_id, check_path, order):
         order['check_type'] = 'client'
         html_like_string = render_to_string('checkgen/client_check.html', {'order': order})
     
-    html_like_bytes = base64.b64encode(bytes(html_like_string, encoding='UTF-8')).decode('UTF-8')  # преобразование
+    html_like_bytes = b64encode(bytes(html_like_string, encoding='UTF-8')).decode('UTF-8')  # преобразование
  
     response = requests.post('http://localhost:8001', json={'contents': html_like_bytes})  # запрос к wkhtmltopdf
 

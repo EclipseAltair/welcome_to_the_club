@@ -18,10 +18,10 @@ def create_checks(request):    # создание чеков для заказа
         except json.JSONDecodeError:
             return JsonResponse({"error": "Invalid JSON"}, status=400)
         
-        if Check.objects.filter(order__id=body_data['id']).count() != 0:    # если кол-во чеков с данным id не 0
+        if Check.objects.filter(order__id=body_data['id']).exists():    # если чек с данным id существует
             return JsonResponse({"error": "Для данного заказа уже созданы чеки"}, status=400)
         
-        if Printer.objects.filter(point_id=body_data["point_id"]).count() == 0:    # если кол-во принтеров у точки 0
+        if not Printer.objects.filter(point_id=body_data["point_id"]).exists():    # если не сущ. ни одного принтера
             return JsonResponse({"error": "Для данной точки не настроено ни одного принтера"}, status=400)
 
         kitchen_printer = Printer.objects.get(point_id=body_data['point_id'], check_type='kitchen')
@@ -48,11 +48,11 @@ def new_checks(request):    # список доступных чеков для 
             return JsonResponse({"error": "There is not api_key"}, status=400)
         
         try:
-            Printer.objects.get(api_key=api_key)
+            printer = Printer.objects.get(api_key=api_key)
         except Printer.DoesNotExist:
             return JsonResponse({"error": "Ошибка авторизации"}, status=401)
         
-        rendered_checks = Check.objects.filter(printer_id__api_key=api_key, status='rendered')
+        rendered_checks = Check.objects.filter(printer_id=printer, status='rendered')
         
         checks = []
         for rendered_check in rendered_checks:
@@ -75,12 +75,12 @@ def get_check(request):    # pdf-файл чека
             return JsonResponse({"error": "There is not check_id"}, status=400)
         
         try:
-            Printer.objects.get(api_key=api_key)
+            printer = Printer.objects.get(api_key=api_key)
         except Printer.DoesNotExist:
             return JsonResponse({"error": "Ошибка авторизации"}, status=401)
 
         try:
-            check = Check.objects.get(printer_id__api_key=api_key, id=check_id)
+            check = Check.objects.get(printer_id=printer, id=check_id)
         except Check.DoesNotExist:
             return JsonResponse({"error": "Данного чека не существует"}, status=400)
         
